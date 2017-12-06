@@ -1,0 +1,33 @@
+{
+  "name": "cqrs-and-es-deep-dive-js",
+  "version": "1.0.0",
+  "description": "CQRS and ES deep dive",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haroun/cqrs-and-es-deep-dive-js.git"
+  },
+  "keywords": [
+    "cqrs",
+    "es"
+  ],
+  "author": "Harouna Traore",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haroun/cqrs-and-es-deep-dive-js/issues"
+  },
+  "homepage": "https://github.com/haroun/cqrs-and-es-deep-dive-js#readme",
+  "devDependencies": {
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "space": true,
+    "semicolon": false
+  },
+  "dependencies": {
+    "cuid": "^1.3.8"
+  }
+}
