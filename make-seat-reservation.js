@@ -1,21 +1,15 @@
-const uuid = require('./uuid')
+const command = require('./command')
 
-const makeSeatReservation = () => {
-  const id = uuid.generate()
+const makeSeatReservation = ({id, conferenceId, reservationId, numberOfSeats} = {}) => {
   const name = 'make-seat-reservation'
-
-  const iCommand = {
-    id: () => id,
-    name: () => name
-  }
 
   return Object.assign(
     {},
-    iCommand,
+    command({id, name}),
     {
-      conferenceId: null,
-      reservationId: null,
-      numberOfSeats: null
+      conferenceId: () => conferenceId,
+      reservationId: () => reservationId,
+      numberOfSeats: () => numberOfSeats
     }
   )
 }
