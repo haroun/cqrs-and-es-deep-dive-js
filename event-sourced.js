@@ -1,34 +1,46 @@
-const iEventSourced = require('./i-event-sourced')
-
-const eventSourcedMixin = id => {
-  const handlers = {}
+/**
+ * [eventSourcedMixin description]
+ * @param  {[type]}                  id         [description]
+ * @param  {[type]}                  pastEvents [description]
+ * @param  {Object.<string, Object>} handlers   "{event-type: event}"
+ * @return {[type]}                             [description]
+ */
+const eventSourcedMixin = ({id, pastEvents, handlers} = {}) => {
+  /**
+   * @type {Object[]} event collection
+   */
   const pendingEvents = []
 
   let version = -1
 
-  const handles = event => {
-    handlers[event.type] = () => handler
+  const handles = (type, handler) => {
+    handlers[type] = handler
   }
 
   const loadFrom = pastEvents => {
-    pastEvents.forEach((pastEvent) => {
-      handlers[pastEvent.type].invoke(pastEvent)
-      version = event.version
+    pastEvents.forEach(pastEvent => {
+      handlers[pastEvent.type].call(pastEvent)
+      version = pastEvent.version
     })
   }
 
   const update = versionedEvent => {
     versionedEvent.sourceId = id
     versionedEvent.version = version + 1
-    handlers[versionedEvent].invoke(versionedEvent)
+    handlers[versionedEvent.type].call(versionedEvent)
     version = versionedEvent.version
     pendingEvents.push(versionedEvent)
   }
 
-  Object.assign(
+  loadFrom(pastEvents)
+  Object.entries(handlers).forEach(handles)
+
+  return Object.assign(
     {},
-    iEventSourced,
     {
+      update, // FIXME: should remain internal
+      id: () => id,
+      version: () => version,
       events: () => pendingEvents
     }
   )
