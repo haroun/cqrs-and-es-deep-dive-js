@@ -1,14 +1,20 @@
+const order = require('./order')
+const orderItem = require('./order-item')
+
 const orderCommandHandler = repository => {
   const handleRegisterToConference = command => {
-    const items = command.seats.Select(t => new OrderItem(t.seatType, t.quantity)).ToList()
-    const order = repository.find(command.orderId)
-    if (order === null) {
-      order = new Order(command.orderId, command.conferenceId, items)
+    const items = command.seats.map(
+      seat => orderItem({seatType: seat.seatType, quantity: seat.quantity})
+    )
+
+    let currentOrder = repository.find(command.orderId)
+    if (currentOrder === null) {
+      currentOrder = order({orderId: command.orderId, conferenceId: command.conferenceId, items})
     } else {
-      order.updateSeats(items)
+      currentOrder.updateSeats(items)
     }
 
-    repository.save(order, command.id)
+    repository.save(currentOrder, command.id)
   }
 
   const handleConfirmOrder = command => {
